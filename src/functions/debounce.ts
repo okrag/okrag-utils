@@ -1,4 +1,4 @@
-type DebouncedFunction<FunctionType> = FunctionType & {
+export type DebouncedFunction<FunctionType> = FunctionType & {
   clear: () => void;
 };
 
