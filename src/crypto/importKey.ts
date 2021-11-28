@@ -19,7 +19,11 @@ export const importKey = async (pem: string, type: KeyType) => {
       getUsage(type),
     );
     return new Key(native);
-  } catch (e) {
-    throw new Error("Error while importing a key");
+  } catch (_e) {
+    const e = _e as Error;
+    const error = new Error("Error while importing a key: ");
+    error.stack = e.stack;
+    error.message += `${e.name}: ${e.message}`;
+    throw error;
   }
 };

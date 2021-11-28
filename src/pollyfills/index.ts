@@ -1,24 +1,36 @@
-const isNode = typeof module !== "undefined" && module.exports;
+/// <reference lib="webworker" />
+
+const isNode = !!(
+  module?.exports &&
+  process?.release?.name?.search(/node|io.js/) !== -1 &&
+  Object.prototype.toString.call(global?.process) === "[object process]"
+);
 
 const nodeCrypto = isNode ? require("crypto") : null;
 
-const nodePollyfill = <PropertyType>(name: string, property: PropertyType): PropertyType => {
-  if (typeof window === "undefined" || typeof self === "undefined") return property;
-  const windowOrSelf =
-    ((window as any)?.[name] as any) ?? ((self as any)?.[name] as any) ?? property;
-  if (typeof windowOrSelf === "function") {
-    return windowOrSelf.bind(window ?? self);
-  }
+declare const self: ServiceWorkerGlobalScope;
+
+const nodePollyfill = <Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>>(
+  name: Name,
+  property: Window[Name],
+): Window[Name] => {
+  if (isNode) return property;
+
+  const windowOrSelf = self[name] as unknown as Window[Name];
+
+  if (typeof windowOrSelf === "undefined")
+    throw new Error("Property is not defined on neither window nor self");
+
+  if (typeof windowOrSelf === "function") return (windowOrSelf as any).bind(self);
+
   return windowOrSelf;
 };
 
-const nodePollyfillFactory = <PropertyType>(
-  name: string,
-  property: () => PropertyType,
-): PropertyType =>
-  typeof window === "undefined" || typeof self === "undefined"
-    ? property()
-    : ((window as any)?.[name] as any) ?? ((self as any)?.[name] as any) ?? property();
+const nodePollyfillFactory = <Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>>(
+  name: Name,
+  property: () => Window[Name],
+): Window[Name] =>
+  (isNode ? nodePollyfill(name, property()) : nodePollyfill(name, null as any)) as any;
 
 export const atob = nodePollyfill("atob", (data: string) =>
   Buffer.from(data, "base64").toString("binary"),
@@ -27,4 +39,4 @@ export const btoa = nodePollyfill("btoa", (data: string) =>
   Buffer.from(data, "binary").toString("base64"),
 );
 
-export const crypto: Crypto = nodePollyfillFactory("crypto", () => nodeCrypto.webcrypto);
+export const crypto = nodePollyfillFactory("crypto", () => nodeCrypto.webcrypto);
