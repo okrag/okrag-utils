@@ -16,7 +16,21 @@ export enum Language {
   FR_CA = "fr-CA",
   FR_CH = "fr-CH",
 
-  // TODO: Russian, spanish, turkish, arabic, korean, chinease, japanease, portugal, german
+  // Spanish
+  ES_AR = "es-AR",
+  ES_CL = "es-CL",
+  ES_CO = "es-CO",
+  ES_CR = "es-CR",
+  ES_HN = "es-HN",
+  ES_419 = "es-419",
+  ES_MX = "es-MX",
+  ES_PE = "es-PE",
+  ES_ES = "es-ES",
+  ES_US = "es-US",
+  ES_UY = "es-UY",
+  ES_VE = "es-VE",
+
+  // TODO: Russian, turkish, arabic, korean, chinease, japanease, portugal, german
 }
 
 interface LanguageRepresentation {
@@ -32,11 +46,26 @@ export const languagesWithDisplaynameList: LanguageRepresentation[] = [
   { display: "English (New Zeland)", language: Language.EN_NZ },
   { display: "English (South Africa)", language: Language.EN_ZA },
   { display: "English (United Kingdom)", language: Language.EN_GB },
+
   { display: "Polski (Polska)", language: Language.PL_PL },
+
   { display: "Français (France)", language: Language.FR_FR },
   { display: "Français (Canada)", language: Language.FR_CA },
   { display: "Français (Suisse)", language: Language.FR_CH },
-];
+
+  { display: "Español (Argentina)", language: Language.ES_AR },
+  { display: "Español (Chile)", language: Language.ES_CL },
+  { display: "Español (Colombia)", language: Language.ES_CO },
+  { display: "Español (Costa Rica)", language: Language.ES_CR },
+  { display: "Español (Honduras)", language: Language.ES_HN },
+  { display: "Español (Latinoamérica)", language: Language.ES_419 },
+  { display: "Español (México)", language: Language.ES_MX },
+  { display: "Español (Perú)", language: Language.ES_PE },
+  { display: "Español (España)", language: Language.ES_ES },
+  { display: "Español (Estados Unidos)", language: Language.ES_US },
+  { display: "Español (Uruguay)", language: Language.ES_UY },
+  { display: "Español (Venezuela)", language: Language.ES_VE },
+].sort((a, b) => a.display.localeCompare(b.display));
 
 export const regions: Record<string, string[]> = {
   en: ["US", "GB", "AU", "CA", "IN", "NZ", "ZA"],
