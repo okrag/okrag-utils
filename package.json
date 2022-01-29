@@ -1,16 +1,25 @@
 {
   "name": "okrag-utils",
   "version": "1.0.0",
-  "private": true,
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
     "dev:test": "nodemon src/test.ts",
     "dev:pack": "nodemon -e ts,json,tsx --ignore build/ --exec \"npm run pack\"",
+    "prepublish": "npm run build",
     "prepack": "npm run build",
     "pack": "mv \"$(npm pack | tail -n 1)\" ~/libs/okrag-utils.tgz"
   },
-  "author": "Okrag",
+  "repository": {
+    "directory": "",
+    "type": "git",
+    "url": "https://github.com/okrag/okrag-utils"
+  },
+  "keywords": [
+    "okrag",
+    "utils"
+  ],
+  "author": "okrag",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.14.37",
