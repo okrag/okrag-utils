@@ -6,12 +6,10 @@
     "build": "tsc",
     "dev:test": "nodemon src/test.ts",
     "dev:pack": "nodemon -e ts,json,tsx --ignore build/ --exec \"npm run pack\"",
-    "prepublish": "npm run build",
     "prepack": "npm run build",
     "pack": "mv \"$(npm pack | tail -n 1)\" ~/libs/okrag-utils.tgz"
   },
   "repository": {
-    "directory": "",
     "type": "git",
     "url": "https://github.com/okrag/okrag-utils"
   },
