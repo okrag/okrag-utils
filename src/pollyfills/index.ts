@@ -21,7 +21,7 @@ try {
 
 declare const self: ServiceWorkerGlobalScope;
 
-const nodePollyfill = <Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>>(
+export const nodePollyfill = <Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>>(
   name: Name,
   property: Window[Name],
 ): Window[Name] => {
@@ -37,7 +37,9 @@ const nodePollyfill = <Name extends Extract<keyof Window, keyof ServiceWorkerGlo
   return windowOrSelf;
 };
 
-const nodePollyfillFactory = <Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>>(
+export const nodePollyfillFactory = <
+  Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>,
+>(
   name: Name,
   property: () => Window[Name],
 ): Window[Name] =>
@@ -50,7 +52,11 @@ export const btoa = nodePollyfill("btoa", (data: string) =>
   Buffer.from(data, "binary").toString("base64"),
 );
 
-const NodeRequire = require;
+const getGlobal = <Name extends keyof (NodeJS.Global & typeof globalThis)>(
+  name: Name,
+): (NodeJS.Global & typeof globalThis)[Name] => global[name];
+
+export const NodeRequire = getGlobal("require");
 
 export const crypto = nodePollyfillFactory("crypto", () =>
   isWebpack && _non_webpack_require
