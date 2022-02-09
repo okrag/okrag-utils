@@ -11,8 +11,6 @@ try {
   isNode = false;
 }
 
-const nodeCrypto = isNode ? require("crypto") : null;
-
 declare const self: ServiceWorkerGlobalScope;
 
 const nodePollyfill = <Name extends Extract<keyof Window, keyof ServiceWorkerGlobalScope>>(
@@ -44,4 +42,4 @@ export const btoa = nodePollyfill("btoa", (data: string) =>
   Buffer.from(data, "binary").toString("base64"),
 );
 
-export const crypto = nodePollyfillFactory("crypto", () => nodeCrypto.webcrypto);
+export const crypto = nodePollyfillFactory("crypto", () => require("crypto").webcrypto);
