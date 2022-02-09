@@ -1,10 +1,15 @@
 /// <reference lib="webworker" />
 
-const isNode = !!(
-  module?.exports &&
-  process?.release?.name?.search(/node|io.js/) !== -1 &&
-  Object.prototype.toString.call(global?.process) === "[object process]"
-);
+let isNode = false;
+try {
+  isNode = !!(
+    module?.exports &&
+    process?.release?.name?.search(/node|io.js/) !== -1 &&
+    Object.prototype.toString.call(global?.process) === "[object process]"
+  );
+} catch (e) {
+  isNode = false;
+}
 
 const nodeCrypto = isNode ? require("crypto") : null;
 
