@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
 
+declare const _non_webpack_require: NodeRequire | undefined;
+
 let isNode = false;
 try {
   isNode = !!(
@@ -9,6 +11,12 @@ try {
   );
 } catch (e) {
   isNode = false;
+}
+let isWebpack = false;
+try {
+  isWebpack = !!_non_webpack_require;
+} catch (e) {
+  isWebpack = false;
 }
 
 declare const self: ServiceWorkerGlobalScope;
@@ -42,4 +50,8 @@ export const btoa = nodePollyfill("btoa", (data: string) =>
   Buffer.from(data, "binary").toString("base64"),
 );
 
-export const crypto = nodePollyfillFactory("crypto", () => require("crypto").webcrypto);
+export const crypto = nodePollyfillFactory("crypto", () =>
+  isWebpack && _non_webpack_require
+    ? _non_webpack_require("crypto").webcrypto
+    : require("crypto").webcrypto,
+);
