@@ -1,10 +1,6 @@
 {
   "name": "okrag-utils",
-<<<<<<< HEAD
   "version": "1.0.1",
-=======
-  "version": "1.0.0",
->>>>>>> 2965ecdcbd7e712e95b57dbf22f3a26b01f4c49a
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
