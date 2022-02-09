@@ -50,8 +50,10 @@ export const btoa = nodePollyfill("btoa", (data: string) =>
   Buffer.from(data, "binary").toString("base64"),
 );
 
+const NodeRequire = require;
+
 export const crypto = nodePollyfillFactory("crypto", () =>
   isWebpack && _non_webpack_require
     ? _non_webpack_require("crypto").webcrypto
-    : require("crypto").webcrypto,
+    : NodeRequire("crypto").webcrypto,
 );
