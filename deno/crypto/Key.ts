@@ -101,6 +101,23 @@ export class Key {
       throw new Error("Error while encrypting a message");
     }
   }
+
+  async encryptRaw(data: Uint8Array) {
+    if (!this.native.usages.includes("encrypt")) throw Error("Can't encrypt with that key");
+    try {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+
+      const encrypted = await crypto.subtle.encrypt(
+        { ...this.native.algorithm, iv },
+        this.native,
+        data,
+      );
+      return { encrypted, iv };
+    } catch (e) {
+      throw new Error("Error while encrypting a message");
+    }
+  }
+
   async decrypt(message: string) {
     if (!this.native.usages.includes("decrypt")) throw Error("Can't decrypt with that key");
     try {
@@ -113,6 +130,20 @@ export class Key {
         buffer,
       );
       return arrayBufferToUtf8(decrypted as any);
+    } catch (e) {
+      throw new Error("Error while decrypting a message");
+    }
+  }
+
+  async decryptRaw({ encrypted, iv }: { encrypted: Uint8Array; iv: Uint8Array }) {
+    if (!this.native.usages.includes("decrypt")) throw Error("Can't decrypt with that key");
+    try {
+      const decrypted = await crypto.subtle.decrypt(
+        { ...this.native.algorithm, iv: iv },
+        this.native,
+        encrypted,
+      );
+      return decrypted as Uint8Array;
     } catch (e) {
       throw new Error("Error while decrypting a message");
     }
