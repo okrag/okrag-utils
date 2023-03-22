@@ -51,9 +51,8 @@ export const atob = nodePollyfill("atob", (data: string) =>
 export const btoa = nodePollyfill("btoa", (data: string) =>
   Buffer.from(data, "binary").toString("base64"),
 );
-const getModule = <Name extends keyof (NodeJS.Global & typeof globalThis)>(
-  name: Name,
-): (NodeJS.Global & typeof globalThis)[Name] => (module as any)[name];
+const getModule = <Name extends keyof typeof globalThis>(name: Name): typeof globalThis[Name] =>
+  (module as any)[name];
 
 export const crypto = nodePollyfillFactory("crypto", () =>
   isWebpack && _non_webpack_require

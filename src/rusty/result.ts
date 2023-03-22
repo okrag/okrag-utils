@@ -2,12 +2,12 @@ import { Enum } from "./Enum";
 import { Panic } from "./panic";
 import { none, Option, some } from "./option";
 
-export class Result<
-  V,
-  E,
-  I extends "error" | "ok" = "error" | "ok",
-  Opened extends boolean = false,
-> extends Enum<Opened, { error: E; ok: V }, I> {
+export class Result<V, E, I extends "error" | "ok" = "error" | "ok"> extends Enum<
+  { error: E; ok: V },
+  I
+> {
+  _v!: V;
+  _e!: E;
   unwrap(): V {
     if (this.isError()) throw new Panic("called unwrap() on an error resukt\n" + this.value);
     return this.value as V;
@@ -51,9 +51,7 @@ export class Result<
   }
 }
 
-export const ok = <V, E = any, I extends "ok" | "error" = "ok", O extends boolean = true>(
-  value: V,
-) => new Result<V, E, I, O>("ok" as any, value as any);
-export const error = <E, V = any, I extends "ok" | "error" = "error", O extends boolean = true>(
-  error: E,
-) => new Result<V, E, I, O>("error" as any, error as any);
+export const ok = <V, E = any, I extends "ok" | "error" = "ok">(value: V) =>
+  new Result<V, E, I>("ok" as any, value as any);
+export const error = <E, V = any, I extends "ok" | "error" = "error">(error: E) =>
+  new Result<V, E, I>("error" as any, error as any);

@@ -1,9 +1,9 @@
 {
   "name": "okrag-utils",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf build && tsc",
     "dev:test": "nodemon src/test.ts",
     "dev:pack": "nodemon -e ts,json,tsx --ignore build/ --exec \"npm run pack\"",
     "prepack": "npm run build",
